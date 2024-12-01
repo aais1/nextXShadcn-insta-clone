@@ -4,7 +4,7 @@ import "./globals.css";
 import ReponsiveMenu from "./components/ReponsiveMenu";
 import Providers from "./providers";
 import {Navigation} from '@/app/components/Navigation'
-import NewPostModal from "./components/NewPostModal";
+import { Toaster } from "@/components/ui/toaster"
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,6 +37,7 @@ export default function RootLayout({
         <ReponsiveMenu/>
         <Navigation />
         {children}
+        <Toaster />
 </Providers>
             
        
