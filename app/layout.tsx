@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import ReponsiveMenu from "./components/ReponsiveMenu";
-import { ThemeProvider } from "@/app/components/theme-provider"
+import Providers from "./providers";
+import {Navigation} from '@/app/components/Navigation'
+import NewPostModal from "./components/NewPostModal";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -30,15 +32,14 @@ export default function RootLayout({
       <body
         className={` ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
+<Providers>
+
         <ReponsiveMenu/>
+        <Navigation />
         {children}
-        </ThemeProvider>
+</Providers>
+            
+       
       </body>
     </html>
   );

@@ -1,6 +1,5 @@
 "use client";
 import * as React from "react";
-import Link from "next/link";
 import { ModeToggle } from "./ModeToggle";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
@@ -8,13 +7,14 @@ import Logo from "./insta-logo.png";
 import { useTheme } from "next-themes";
 import LogoWhite from "./insta-logo-white.png";
 import { Button } from "@/components/ui/button";
-import { House } from "lucide-react";
+import { House, LogOut } from "lucide-react";
 import { Mail } from "lucide-react";
 import { Search } from "lucide-react";
 import { DiamondPlus } from "lucide-react";
 import { Compass } from "lucide-react";
 import { Heart } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import Link from "next/link";
 import {
   Tooltip,
   TooltipContent,
@@ -23,13 +23,7 @@ import {
 } from "@/components/ui/tooltip";
 
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
+  NavigationMenuLink
 } from "@/components/ui/navigation-menu";
 import {
   DropdownMenu,
@@ -39,91 +33,41 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-
-const components: { title: string; href: string; description: string }[] = [
-  {
-    title: "User Profile",
-    href: "/docs/features/user-profile",
-    description: "Manage user information, preferences, and privacy settings.",
-  },
-  {
-    title: "Notifications",
-    href: "/docs/features/notifications",
-    description: "Customize and manage notifications for different activities.",
-  },
-  {
-    title: "Payment Integration",
-    href: "/docs/features/payment-integration",
-    description:
-      "Securely handle payment processing with various payment gateways.",
-  },
-  {
-    title: "User Authentication",
-    href: "/docs/features/user-authentication",
-    description: "Implement login, registration, and password management.",
-  },
-  {
-    title: "Data Analytics",
-    href: "/docs/features/data-analytics",
-    description: "View and analyze user data, reports, and activity metrics.",
-  },
-  {
-    title: "Security Settings",
-    href: "/docs/features/security-settings",
-    description:
-      "Configure security features such as two-factor authentication and encryption.",
-  },
-];
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { useShowAddPostModalContext } from "../contexts/ShowAddPostModal";
+import NewPostModal from "./NewPostModal";
 
 export function Navigation() {
   const { theme } = useTheme();
-  const loggedIn = true;
+  const data= useSession();
+ 
+  const loggedIn = data?.data?.user ? true : false;
+  const router=useRouter();
+  const {showAddPostModal,setShowAddPostModal}=useShowAddPostModalContext();
 
   return (
     <div className="">
+      {
+        showAddPostModal && <NewPostModal/>
+      }
     <div className="flex items-center justify-between md:w-[calc(614px+350px)] mx-auto md:px-0 px-1 ">
       <div className="cursor-pointer">
         <Link href="/">
-        {theme !== "light" ? (
+      {theme !== "light" ? (
           <Image src={LogoWhite} width={100} height={120} alt="Insta" />
         ) : (
           <Image src={Logo} width={100} height={80} alt="Insta" />
         )}
         </Link>
       </div>
-      {/* <NavigationMenu className="hidden md:flex items-center">
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>Features</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {components.map((component) => (
-                    <ListItem
-                      key={component.title}
-                      title={component.title}
-                      href={component.href}
-                    >
-                      {component.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/docs" legacyBehavior passHref>
-                <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Full Documentation
-                </NavigationMenuLink>
-              </Link>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-      </NavigationMenu> */}
-      
+     
 
       <div className="flex items-center gap-x-[1px] md:gap-x-2">
       {loggedIn && (
         <div className="flex items-center gap-x-[7.5px] md:gap-x-[22px]">
           {/* Home Icon with Tooltip */}
+          <Link href="/">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -136,8 +80,10 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </Link>
 
           {/* Mail Icon with Tooltip */}
+          <Link href="/messaging">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -150,8 +96,10 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </Link>
 
           {/* Search Icon with Tooltip */}
+          <Link href="/search">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -164,8 +112,13 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </Link>
 
           {/* Add Post Icon with Tooltip */}
+          <button onClick={()=>{
+            console.log(showAddPostModal)
+            setShowAddPostModal(!showAddPostModal)
+          }}>
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -178,8 +131,11 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </button>
+          
 
           {/* Explore Icon with Tooltip */}
+          <Link href="/explore">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -192,8 +148,10 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </Link>
 
           {/* Liked Posts Icon with Tooltip */}
+          <Link href="/liked">
           <TooltipProvider>
             <Tooltip>
               <TooltipTrigger asChild>
@@ -206,24 +164,31 @@ export function Navigation() {
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
+          </Link>
 
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage src={ data?.data?.user?.image ||"https://github.com/shadcn.png"} />
                 <AvatarFallback>{"A"}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="text-center">
-              <DropdownMenuLabel>Settings</DropdownMenuLabel>
+              <DropdownMenuLabel>{data?.data?.user?.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem className="text-center">Logout</DropdownMenuItem>
+              <DropdownMenuItem onClick={()=>{
+                signOut()
+                router.push("/sign-in")
+              }} className="text-center">Logout <LogOut/></DropdownMenuItem>
               <DropdownMenuItem className="text-center">Subscription</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       )}
-        {!loggedIn && <Button>Login</Button>}
+        {!loggedIn &&<> <Button onClick={()=>{
+          signIn()
+        }}>Login</Button>
+        </>}
         <ModeToggle />
       </div>
     </div>
