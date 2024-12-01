@@ -25,8 +25,8 @@ export default function Home() {
               {
                 data?.user &&
                 <Avatar  className="size-[70px] cursor-pointer  border-[3px] border-red-500 ">
-                <AvatarImage src={data?.user?.image} />
-                <AvatarFallback>{"A"}</AvatarFallback>
+                <AvatarImage src={data?.user?.image ||  data?.user?.name?.charAt(0).toUpperCase()  } />
+                <AvatarFallback>{data?.user?.name?.charAt(0).toUpperCase() }</AvatarFallback>
               </Avatar>
               }
              {

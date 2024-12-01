@@ -169,8 +169,8 @@ export function Navigation() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar>
-                <AvatarImage src={ data?.data?.user?.image ||"https://github.com/shadcn.png"} />
-                <AvatarFallback>{"A"}</AvatarFallback>
+                <AvatarImage src={ data?.data?.user?.image || data?.data?.user?.name?.charAt(0).toUpperCase()} />
+                <AvatarFallback>{data?.data?.user?.name?.charAt(0).toUpperCase()}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="text-center">
