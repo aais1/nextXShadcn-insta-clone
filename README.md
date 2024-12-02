@@ -1,6 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
+## NextJS Insta Clone (Includes Light and Dark Theme (using shadcn) )
 
 First, run the development server:
 
@@ -13,6 +11,16 @@ pnpm dev
 # or
 bun dev
 ```
+
+## Used
+- NextJS v15 (App Router)
+- MongoAtlas to store Data
+- Mongoose as the ODM
+- Shadcn as the component library
+- NextAuth to handle authentication
+- Cloudinary to upload and store images
+- React Context API to avoid prop drilling 
+- Tailwind for styling
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
