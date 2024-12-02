@@ -2,19 +2,27 @@
 import { useShowAddPostModalContext } from "../contexts/ShowAddPostModal";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { CldUploadWidget } from 'next-cloudinary';
+import { CldUploadWidget } from "next-cloudinary";
 import { useToast } from "@/hooks/use-toast";
 import { UploadPost } from "../actions";
 import { useSession } from "next-auth/react";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
+import { useCallback } from "react";
+import debounce from "lodash.debounce";
+
 
 export default function NewPostModal() {
   const { setShowAddPostModal } = useShowAddPostModalContext();
   const [desc, setDesc] = useState<string>(""); // State for description
+  const [location, setLocation] = useState<string>("");
   const [imagesUrl, setImagesUrl] = useState<string[]>([]); // State for image URLs
+  const [loading,setLoading]=useState<boolean>();
+  const [suggestions,setSuggestions]=useState<string[]>([]);
   const { toast } = useToast(); // Toast hook for notifications
-  const session:any = useSession();
-  console.log(session)
+  const [showSuggestions,setShowSuggestions]=useState<boolean>();
+  const session: any = useSession();
+  console.log(session);
 
   // Function to handle outer click to close the modal
   const handleOuterClick = () => {
@@ -39,10 +47,10 @@ export default function NewPostModal() {
 
     try {
       // Call the UploadPost server action with the form data
-      console.log('sending req')
+      console.log("sending req");
       const response = await UploadPost(postData);
-      console.log('sent req')
-      console.log(response)
+      console.log("sent req");
+      console.log(response);
 
       if (response?.message === "Post uploaded successfully!") {
         toast({
@@ -65,6 +73,23 @@ export default function NewPostModal() {
     }
   };
 
+
+  const fetchSuggestions = async (location: string) => {
+    try {
+      const resp = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_KEY}`);
+      const data = await resp.json();
+      if(location.length>0){
+        setShowSuggestions(true);
+      }
+      console.log(data)
+      setSuggestions(data.features);
+    } catch (error: any) {
+      console.error(error.message);
+    }
+  };
+
+  const debouncedFetchSuggestions = useCallback(debounce(fetchSuggestions, 300), []);
+
   return (
     <div
       onClick={handleOuterClick}
@@ -74,45 +99,88 @@ export default function NewPostModal() {
         onClick={handleInnerClick}
         className="bg-[#262626] w-[90vw] sm:w-[80vw] md:w-[500px] lg:w-[600px] p-6 rounded-lg shadow-lg flex flex-col items-center relative justify-start"
       >
-              <button
-              onClick={() => setShowAddPostModal(false)}
-              className="px-4 py-2 bg-red-500 text-white text-xl font bold absolute top-3 right-3 rounded-md hover:bg-red-600 focus:outline-none"
-            >
-              X
-            </button>
+        <button
+          onClick={() => setShowAddPostModal(false)}
+          className="px-4 py-2 bg-red-500 text-white text-xl font bold absolute top-3 right-3 rounded-md hover:bg-red-600 focus:outline-none"
+        >
+          X
+        </button>
 
         <form className="w-full" onSubmit={handleSubmit}>
           <h2 className="text-white text-xl font-semibold mb-4 text-center">
             Add a new post
           </h2>
 
-    
-
           {/* Description Input */}
           <div className="mb-4 flex flex-col w-full">
-            <label className="block text-white text-sm font-bold mb-2" htmlFor="description">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="description"
+            >
               Description
             </label>
             <Textarea
-              className="w-full px-4 py-2 text-black rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="description"
               placeholder="Enter post description"
               value={desc}
               onChange={(e) => setDesc(e.target.value)}
               rows={4}
+              style={{
+                resize: "none",
+              }}
             />
+          </div>
+
+          <div className="mb-4 flex flex-col w-full">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="description"
+            >
+              Location
+            </label>
+            <div className="relative">
+              <Input
+                className="w-full px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                id="location"
+                placeholder="Enter Location"
+                value={location}
+                onChange={async(e) => {
+                  setLocation(e.target.value)
+                  debouncedFetchSuggestions(e.target.value);
+                }}
+              />
+              {location.length > 0 && showSuggestions && (
+                <div className="top-1 gap-x-1 text-md text-center max-h-[140px] overflow-y-scroll w-[full] mx-auto rounded-lg bg-black divide-y-2">
+                  {
+                    suggestions?.length>0 && suggestions.map((suggestion:any,index:any)=>(
+                      <p onClick={()=>{
+                        setLocation(suggestion.properties.formatted);
+                        setShowSuggestions(false);
+                      }} className="cursor-pointer bg-red-500 hover:bg-red-800 p-2" key={index}>{suggestion.properties.formatted}</p>
+                    ))
+                  }
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Media Upload */}
           <div className="mb-4 w-full">
-            <label className="block text-white text-sm font-bold mb-2" htmlFor="media">
+            <label
+              className="block text-white text-sm font-bold mb-2"
+              htmlFor="media"
+            >
               Media (Images or Videos)
             </label>
             <CldUploadWidget
               onSuccess={(result: any) => {
-                console.log('uploaded ', result);
+                console.log("uploaded ", result);
                 console.log(result.info.secure_url);
-                setImagesUrl((prevImgs: any) => [...prevImgs, result.info.secure_url]);
+                setImagesUrl((prevImgs: any) => [
+                  ...prevImgs,
+                  result.info.secure_url,
+                ]);
                 toast({
                   title: "Image uploaded successfully",
                   variant: "default",
@@ -121,12 +189,14 @@ export default function NewPostModal() {
               uploadPreset="us5fdilf"
             >
               {({ open }) => (
-                <Button onClick={(e) =>{
-                  e.stopPropagation(); 
-                  open()
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    open();
                   }}
                   className="w-full"
-                  type="button">
+                  type="button"
+                >
                   Upload an Image
                 </Button>
               )}

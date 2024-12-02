@@ -177,6 +177,11 @@ export function Navigation() {
             <DropdownMenuContent className="text-center">
               <DropdownMenuLabel>{data?.data?.user?.name}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <Link href={`/${data?.data?.user?.name}`}>
+                  Profile
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={()=>{
                 signOut()
                 router.push("/sign-in")
