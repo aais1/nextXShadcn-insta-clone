@@ -10,6 +10,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
 import { useCallback } from "react";
 import debounce from "lodash.debounce";
+import { Loader2 } from "lucide-react";
 
 
 export default function NewPostModal() {
@@ -17,7 +18,7 @@ export default function NewPostModal() {
   const [desc, setDesc] = useState<string>(""); // State for description
   const [location, setLocation] = useState<string>("");
   const [imagesUrl, setImagesUrl] = useState<string[]>([]); // State for image URLs
-  const [loading,setLoading]=useState<boolean>();
+  const [loading,setLoading]=useState<boolean>(false);
   const [suggestions,setSuggestions]=useState<string[]>([]);
   const { toast } = useToast(); // Toast hook for notifications
   const [showSuggestions,setShowSuggestions]=useState<boolean>();
@@ -75,6 +76,7 @@ export default function NewPostModal() {
 
 
   const fetchSuggestions = async (location: string) => {
+    setLoading(true)
     try {
       const resp = await fetch(`https://api.geoapify.com/v1/geocode/autocomplete?text=${location}&apiKey=${process.env.NEXT_PUBLIC_GEOAPIFY_KEY}`);
       const data = await resp.json();
@@ -85,6 +87,8 @@ export default function NewPostModal() {
       setSuggestions(data.features);
     } catch (error: any) {
       console.error(error.message);
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -120,7 +124,7 @@ export default function NewPostModal() {
               Description
             </label>
             <Textarea
-              className="w-full px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2  rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="description"
               placeholder="Enter post description"
               value={desc}
@@ -141,7 +145,7 @@ export default function NewPostModal() {
             </label>
             <div className="relative">
               <Input
-                className="w-full px-4 py-2 text-white rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2  rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 id="location"
                 placeholder="Enter Location"
                 value={location}
@@ -150,18 +154,26 @@ export default function NewPostModal() {
                   debouncedFetchSuggestions(e.target.value);
                 }}
               />
-              {location.length > 0 && showSuggestions && (
+              {!loading && location.length > 0 && showSuggestions && (
                 <div className="top-1 gap-x-1 text-md text-center max-h-[140px] overflow-y-scroll w-[full] mx-auto rounded-lg bg-black divide-y-2">
                   {
                     suggestions?.length>0 && suggestions.map((suggestion:any,index:any)=>(
                       <p onClick={()=>{
                         setLocation(suggestion.properties.formatted);
                         setShowSuggestions(false);
-                      }} className="cursor-pointer bg-red-500 hover:bg-red-800 p-2" key={index}>{suggestion.properties.formatted}</p>
+                      }} className="cursor-pointer bg-white hover:text-white hover:bg-[rgba(20,17,17,0.77)] dark:bg-black dark:hover:bg-[rgba(83,83,83,0.49)] p-2 py-3" key={index}>{suggestion.properties.formatted}</p>
                     ))
                   }
                 </div>
               )}
+              {
+                loading && 
+                <div className="top-1 bg-black text-center min-h-[120px]  w-[full] mx-auto rounded-lg  flex items-center justify-center">
+                {
+                   <Loader2 className="animate-spin mr-2" size={34}/>
+                }
+              </div>
+              }
             </div>
           </div>
 
