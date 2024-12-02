@@ -14,7 +14,7 @@ import PostImage from "./Post-Img.png";
 const Post = () => {
   return (
     <div className="py-4 flex flex-col  border border-white">
-      <div className="flex mb-4 px-4 items-center justify-between">
+      <div className="flex px-4 mb-4 items-center justify-between">
         <div className="flex  items-center gap-x-4">
           <Avatar>
             <AvatarImage src="https://github.com/shadcn.png" />
@@ -40,7 +40,7 @@ const Post = () => {
         // content
         <Image
           src={PostImage}
-          className="w-[654px] mx-auto h-[614px]"
+          className="md:w-[654px] w-full h-[400px] mx-auto md:h-[614px]"
           alt="user upload"
           width={654}
           height={614}

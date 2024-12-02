@@ -6,6 +6,7 @@ import { CldUploadWidget } from 'next-cloudinary';
 import { useToast } from "@/hooks/use-toast";
 import { UploadPost } from "../actions";
 import { useSession } from "next-auth/react";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function NewPostModal() {
   const { setShowAddPostModal } = useShowAddPostModalContext();
@@ -67,23 +68,32 @@ export default function NewPostModal() {
   return (
     <div
       onClick={handleOuterClick}
-      className="fixed inset-0 cursor-pointer bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
+      className="fixed bg-gray-800 inset-0 cursor-pointer bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
     >
       <div
         onClick={handleInnerClick}
-        className="bg-[#262626] w-[90vw] sm:w-[80vw] md:w-[500px] lg:w-[600px] p-6 rounded-lg shadow-lg flex flex-col items-center justify-start"
+        className="bg-[#262626] w-[90vw] sm:w-[80vw] md:w-[500px] lg:w-[600px] p-6 rounded-lg shadow-lg flex flex-col items-center relative justify-start"
       >
-        <form onSubmit={handleSubmit}>
+              <button
+              onClick={() => setShowAddPostModal(false)}
+              className="px-4 py-2 bg-red-500 text-white text-xl font bold absolute top-3 right-3 rounded-md hover:bg-red-600 focus:outline-none"
+            >
+              X
+            </button>
+
+        <form className="w-full" onSubmit={handleSubmit}>
           <h2 className="text-white text-xl font-semibold mb-4 text-center">
             Add a new post
           </h2>
+
+    
 
           {/* Description Input */}
           <div className="mb-4 flex flex-col w-full">
             <label className="block text-white text-sm font-bold mb-2" htmlFor="description">
               Description
             </label>
-            <textarea
+            <Textarea
               className="w-full px-4 py-2 text-black rounded-md shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               id="description"
               placeholder="Enter post description"
@@ -115,6 +125,7 @@ export default function NewPostModal() {
                   e.stopPropagation(); 
                   open()
                   }}
+                  className="w-full"
                   type="button">
                   Upload an Image
                 </Button>
@@ -124,13 +135,7 @@ export default function NewPostModal() {
 
           {/* Form Action Buttons */}
           <div className="flex justify-between w-full mt-6">
-            <button
-              onClick={() => setShowAddPostModal(false)}
-              className="px-6 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 focus:outline-none"
-            >
-              X
-            </button>
-            <Button type="submit">
+            <Button type="submit" className="font-bold">
               Submit
             </Button>
           </div>

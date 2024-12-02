@@ -181,7 +181,6 @@ export function Navigation() {
                 signOut()
                 router.push("/sign-in")
               }} className="text-center">Logout <LogOut/></DropdownMenuItem>
-              <DropdownMenuItem className="text-center">Subscription</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
