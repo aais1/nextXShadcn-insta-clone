@@ -2,10 +2,15 @@
 import { createContext, useContext } from "react";
 import { useState } from "react";
 
-const ShowAddPostModalContext = createContext(false);
+type ShowAddPostModalContextType={
+    showAddPostModal:boolean;
+    setShowAddPostModal:React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ShowAddPostModalContext = createContext<ShowAddPostModalContextType | undefined>(undefined);
 
 export const ShowAddPostModalProvider = ({ children }:{children:React.ReactNode}) => {
-    const [showAddPostModal, setShowAddPostModal] = useState(false);
+    const [showAddPostModal, setShowAddPostModal] = useState<boolean>(false);
     return (
         <ShowAddPostModalContext.Provider value={{ showAddPostModal, setShowAddPostModal }}>
             {children}
@@ -13,7 +18,7 @@ export const ShowAddPostModalProvider = ({ children }:{children:React.ReactNode}
     )
 }
 
-export const useShowAddPostModalContext = () => {
+export const useShowAddPostModalContext = () : ShowAddPostModalContextType => {
     const context = useContext(ShowAddPostModalContext);
   
     if (!context) {

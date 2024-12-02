@@ -6,10 +6,29 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Post from "./components/Post";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 
 
 export default function Home() {
-  const {data}=useSession();
+  const {data }=useSession();
+  const [ posts ,setPosts ] = useState([]);
+  console.log(data)
+
+  useEffect(() => {
+    const fetchData=async()=>{
+      try {
+        const response=await fetch('/api/posts',{
+          credentials: 'include'
+        });
+        const data=await response.json();
+        console.log(data)
+        setPosts(data.posts)
+      } catch (error:any) {
+        console.error(error.message)
+      }
+    }
+    fetchData();
+  },[data])
   return (
     <div className="min-h-screen">
       <div className="mt-[20px]">

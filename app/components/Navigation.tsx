@@ -41,6 +41,7 @@ import NewPostModal from "./NewPostModal";
 export function Navigation() {
   const { theme } = useTheme();
   const data= useSession();
+  console.log(data)
  
   const loggedIn = data?.data?.user ? true : false;
   const router=useRouter();

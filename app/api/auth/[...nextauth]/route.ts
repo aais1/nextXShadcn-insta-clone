@@ -38,6 +38,14 @@ const handler = NextAuth({
         }
        })
       ],
+      secret: '4657890-@&^%$#jukhjn',
+    callbacks: {
+      async session({ session, token }) {
+        session.user.id = token.id;
+        console.log("session ", session);
+        return session;
+      },
+    },
     pages: {
         signIn: '/sign-in',
     }

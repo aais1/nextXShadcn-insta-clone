@@ -58,9 +58,9 @@ const Post = () => {
       </div>
 
       <div className="px-4">
-        <p>1000 Likes</p>
+        <p className="pb-2">1000 Likes</p>
         <p> <span className="font-semibold">Ali Aais</span> <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id repellat cum asperiores hic, explicabo inventor .... <span className="underline cursor-pointer font-semibold">See More</span></span></p>
-        <p className="text-sm pt-2">View all {'100'} comments</p>
+        <span className="text-sm inline-block pt-2 hover:underline cursor-pointer">View all {'100'} comments</span>
         <p className="text-sm py-1">1 {"hour"} ago</p>
       </div>
     </div>

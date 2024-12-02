@@ -1,6 +1,6 @@
 // app/api/auth/register/route.ts
 import bcrypt from 'bcryptjs';
-import User from '@/models/User'; // Make sure you have the correct path to the model
+import User from '@/models/User'; 
 
 export async function POST(req: Request) {
   try {
@@ -18,8 +18,7 @@ export async function POST(req: Request) {
     }
 
   
-    const hashedPassword = await bcrypt.hash(password, 10); // Salt rounds is 10
-
+    const hashedPassword = await bcrypt.hash(password, 10); 
 
     const newUser = new User({
       name,
