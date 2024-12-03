@@ -17,14 +17,14 @@ import { useToast } from "@/hooks/use-toast"
 import { Loader2 } from "lucide-react";
 
 export function SignUpForm() {
-  // States for form fields
+
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [name, setName] = useState("")
   const [loading, setLoading] = useState(false)
   const {toast}=useToast();
 
-  // Handle form submit
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
@@ -41,26 +41,25 @@ export function SignUpForm() {
       const data = await res.json()
 
       if (res.ok) {
-        // Show success toast
+      
         toast({
           title: "Success",
           description: "User registered successfully.",
-          variant: "success",
+          variant: "default",
         })
-        // You can now redirect the user to the login page, for example:
+
         setTimeout(() => {
           window.location.href = "/sign-in"
         }, 2000)
       } else {
-        // Show error toast
         toast({
           title: "Error",
           description: data.error || "Something went wrong. Please try again.",
           variant: "destructive",
         })
       }
-    } catch (error:any) {
-      // Show error toast in case of network issues or unexpected errors
+    } catch  {
+
       toast({
         title: "Error",
         description: "Something went wrong. Please try again.",

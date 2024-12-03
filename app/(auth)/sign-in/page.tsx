@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 export default function Page() {
-    const session:any = useSession();
+    const session = useSession();
     const router=useRouter();
     useEffect(()=>{
         if(session?.status === "authenticated"){

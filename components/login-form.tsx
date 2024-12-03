@@ -25,7 +25,7 @@ export function LoginForm() {
   const { toast } = useToast()
   const router = useRouter()
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
 
@@ -47,7 +47,7 @@ export function LoginForm() {
       toast({
         title: "Success",
         description: "You have logged in successfully.",
-        variant: "success", // For success message
+        variant: "default", // For success message
       })
       router.push('/') // Redirect on successful login
     }

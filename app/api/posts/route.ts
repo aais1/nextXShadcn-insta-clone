@@ -1,17 +1,16 @@
-import { getSession } from "next-auth/react";
-import { NextApiRequest } from "next";
-import { NextResponse } from "next/server";
+
+import { NextResponse  } from "next/server";
 import { dbConnect } from "@/lib/utils";
 import Post from "@/models/Post";
 
-export async function GET(req: NextApiRequest) {
+export async function GET() {
     try {
         await dbConnect();
 
-        const session = await getSession({ req });
+        // const session = await getSession({ req });
 
-        console.log(req);  
-        console.log(session);  
+        // console.log(req);  
+        // console.log(session);  
 
         const posts = await Post.find({}).populate({
             path: 'uploadedBy',
@@ -19,8 +18,10 @@ export async function GET(req: NextApiRequest) {
         });  
 
         return NextResponse.json({ posts }, { status: 200 });
-    } catch (error: any) {
-        console.error(error.message);
-        return NextResponse.json({ error: error.message }, { status: 500 });
+    } catch (error: unknown) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 });
+        }
+        return NextResponse.json({ error: "An unknown error occurred" }, { status: 500 });
     }
 }

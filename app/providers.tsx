@@ -1,6 +1,4 @@
 "use client";
-
-import type { Session } from "next-auth";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@/app/components/theme-provider";
 import { ShowAddPostModalProvider } from "./contexts/ShowAddPostModal";

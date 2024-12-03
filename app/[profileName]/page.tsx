@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 export default function Page({params}:{
-    params:any
+    params:{
+        profileName:string
+    }
 }){
     const router=useRouter();
     const session=useSession();
@@ -22,10 +24,11 @@ export default function Page({params}:{
                 });
                 const data=await resp.json();
                 console.log(data)
-            } catch (error:any) {
-                console.log(error)
+            } catch {
+                console.log('err')
             }
         }   
+        fetchData();
     },[])
 
     console.log(params.profileName)

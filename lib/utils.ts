@@ -18,7 +18,11 @@ export async function dbConnect() {
     await mongoose.connect(process.env.MONGO_URI || '');
 
     console.log('MongoDB connected successfully');
-  } catch (error:any) {
-    console.error('MongoDB connection error:', error.message);
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('MongoDB connection error:', error.message);
+    } else {
+      console.error('MongoDB connection error:', error);
+    }
   }
 }

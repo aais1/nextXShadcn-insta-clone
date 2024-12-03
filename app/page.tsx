@@ -1,8 +1,4 @@
 "use client"
-import { Navigation } from "@/app/components/Navigation";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Post from "./components/Post";
 import { useSession } from "next-auth/react";
@@ -23,8 +19,9 @@ export default function Home() {
         const data=await response.json();
         console.log(data)
         setPosts(data.posts)
-      } catch (error:any) {
-        console.error(error.message)
+        console.log(posts)
+      } catch  {
+
       }
     }
     fetchData();

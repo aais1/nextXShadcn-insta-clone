@@ -5,6 +5,17 @@ import User from "@/models/User"
 import { dbConnect } from "@/lib/utils"
 import { compare } from "bcryptjs"
 
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
 const handler = NextAuth({
     providers: [
         GithubProvider({
@@ -41,7 +52,9 @@ const handler = NextAuth({
       secret: '4657890-@&^%$#jukhjn',
     callbacks: {
       async session({ session, token }) {
-        session.user.id = token.id;
+        if (session.user) {
+          session.user.id = token.id as string;
+        }
         console.log("session ", session);
         return session;
       },

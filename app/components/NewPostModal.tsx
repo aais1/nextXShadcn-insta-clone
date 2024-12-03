@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 import { useShowAddPostModalContext } from "../contexts/ShowAddPostModal";
 import { useState } from "react";
@@ -22,7 +23,7 @@ export default function NewPostModal() {
   const [suggestions,setSuggestions]=useState<string[]>([]);
   const { toast } = useToast(); // Toast hook for notifications
   const [showSuggestions,setShowSuggestions]=useState<boolean>();
-  const session: any = useSession();
+  const session = useSession();
   console.log(session);
 
   // Function to handle outer click to close the modal
@@ -30,24 +31,20 @@ export default function NewPostModal() {
     setShowAddPostModal(false);
   };
 
-  // Prevent the click from propagating to the outer div
   const handleInnerClick = (e: React.MouseEvent) => {
     e.stopPropagation();
   };
 
-  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
 
-    // Prepare the data to be sent to the server
     const postData = {
-      desc: desc, // Description of the post
-      imagesUrl: imagesUrl, // Array of uploaded image URLs
-      uploadedBy: session?.data?.user?.id, // ID of the user who uploaded the post
+      desc: desc, 
+      imagesUrl: imagesUrl, 
+      uploadedBy: session?.data?.user?.id || "", 
     };
 
     try {
-      // Call the UploadPost server action with the form data
       console.log("sending req");
       const response = await UploadPost(postData);
       console.log("sent req");
@@ -58,7 +55,7 @@ export default function NewPostModal() {
           title: response?.message,
           variant: "default",
         });
-        setShowAddPostModal(false); // Close the modal on success
+        setShowAddPostModal(false); 
       } else {
         toast({
           title: "Error uploading post",
@@ -85,8 +82,8 @@ export default function NewPostModal() {
       }
       console.log(data)
       setSuggestions(data.features);
-    } catch (error: any) {
-      console.error(error.message);
+    } catch  {
+
     }finally{
       setLoading(false)
     }
@@ -157,7 +154,7 @@ export default function NewPostModal() {
               {!loading && location.length > 0 && showSuggestions && (
                 <div className="top-1 gap-x-1 text-md text-center max-h-[140px] overflow-y-scroll w-[full] mx-auto rounded-lg bg-black divide-y-2">
                   {
-                    suggestions?.length>0 && suggestions.map((suggestion:any,index:any)=>(
+                    suggestions?.length>0 && suggestions.map((suggestion:any,index:number)=>(
                       <p onClick={()=>{
                         setLocation(suggestion.properties.formatted);
                         setShowSuggestions(false);
