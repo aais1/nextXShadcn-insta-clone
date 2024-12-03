@@ -1,4 +1,3 @@
-// app/api/auth/register/route.ts
 import bcrypt from 'bcryptjs';
 import User from '@/models/User'; 
 
@@ -16,7 +15,6 @@ export async function POST(req: Request) {
     if (existingUser) {
       return new Response(JSON.stringify({ error: 'User already exists' }), { status: 400 });
     }
-
   
     const hashedPassword = await bcrypt.hash(password, 10); 
 
