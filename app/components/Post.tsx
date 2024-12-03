@@ -92,7 +92,7 @@ const Post = () => {
                 ))}
               </CarouselContent>
             </Carousel>
-            <div className="py-2 text-center absolute bottom-0 mx-auto flex justify-center w-full text-sm text-muted-foreground">
+            <div className="py-2 text-center absolute -bottom-[4px] mx-auto flex justify-center w-full text-sm text-muted-foreground">
               {current} of {count}
             </div>
         </div>
