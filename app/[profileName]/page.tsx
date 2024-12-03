@@ -2,7 +2,6 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import PostImg from '../components/Post-Img.png'; 
 import { Loader2 } from "lucide-react";
@@ -63,9 +62,8 @@ export default function ProfilePage({ params }: { params: { profileName: string 
 
     return (
         <div>
-            <div className="w-full mt-10 md:w-[55vw] mx-auto pb-6 md:p-4">
-                <Card className="bg-white shadow-lg rounded-xl p-6">
-                    <div className="flex flex-col gap-y-6 md:gap-y-0 md:flex-row justify-between items-center space-x-6">
+            <div className="w-full mt-10 md:w-[70vw] mx-auto pb-6 md:p-4">
+                    <div className="flex flex-col gap-y-6 md:gap-y-0 md:flex-row justify-center gap-x-4 md:gap-x-12 items-center px-2 md:px-0 md:space-x-6">
                         <Avatar className="w-48 h-48 cursor-pointer border-[3px] border-red-500">
                             <AvatarImage src={profile.avatar} />
                             <AvatarFallback>{profile.name[0]}</AvatarFallback>
@@ -85,7 +83,6 @@ export default function ProfilePage({ params }: { params: { profileName: string 
                             </div>
                         </div>
                     </div>
-                </Card>
             </div>
 
             <div className="flex justify-center gap-x-4 mt-6">
