@@ -2,7 +2,8 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import PostImg from '../components/Post-Img.png'; 
+import PostImg from '../components/Post-Img.png';
+import Image from 'next/image';
 import { Loader2 } from "lucide-react";
 
 type Post = {
@@ -112,8 +113,7 @@ export default function ProfilePage({ params }: { params: { profileName: string 
                                 <h3 className="text-xl font-semibold">Displaying Posts</h3>
                                 {data?.map((post) => (
                                     <div key={post.id} className="bg-white p-4 rounded-lg shadow-md">
-                                        <h4 className="text-lg font-medium">{post.title}</h4>
-                                        <img src={PostImg} alt={post.title} className="w-full h-48 object-cover rounded-lg mt-2" />
+                                        <Image src={PostImg} alt={post.title} className="w-full h-48 object-cover rounded-lg mt-2" />
                                     </div>
                                 ))}
                             </div>
@@ -124,7 +124,7 @@ export default function ProfilePage({ params }: { params: { profileName: string 
                                 {data?.map((item) => (
                                     <div key={item.id} className="bg-white p-4 rounded-lg shadow-md">
                                         <h4 className="text-lg font-medium">{item.title}</h4>
-                                        <img src={PostImg} alt={item.title} className="w-full h-48 object-cover rounded-lg mt-2" />
+                                        <Image src={PostImg} alt={item.title} className="w-full h-48 object-cover rounded-lg mt-2" />
                                     </div>
                                 ))}
                             </div>
@@ -135,7 +135,7 @@ export default function ProfilePage({ params }: { params: { profileName: string 
                                 {data?.map((item) => (
                                     <div key={item.id} className="bg-white p-4 rounded-lg shadow-md">
                                         <h4 className="text-lg font-medium">{item.title}</h4>
-                                        <img src={PostImg} alt={item.title} className="w-full h-48 object-cover rounded-lg mt-2" />
+                                        <Image src={PostImg} alt={item.title} className="w-full h-48 object-cover rounded-lg mt-2" />
                                     </div>
                                 ))}
                             </div>
