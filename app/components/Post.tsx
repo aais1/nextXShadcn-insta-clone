@@ -24,11 +24,30 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import PostImage from "./Post-Img.png";
+import { set } from "mongoose";
 
-const Post = () => {
+const Post = ({
+  createdAt,
+  description,
+  imagesUrl,
+  likes,
+  uploadedBy,
+  comments
+}: {
+  createdAt: Date;
+  description: string;
+  imagesUrl: string[];
+  likes: number[];
+  comments?: string[];
+  uploadedBy: {
+    name: string;
+    avatar?: string;
+  };
+}) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+  const [seeMore, setSeeMore] = React.useState(false);
 
   React.useEffect(() => {
     if (!api) {
@@ -51,7 +70,7 @@ const Post = () => {
             <AvatarImage src="https://github.com/shadcn.png" />
             <AvatarFallback>{"A"}</AvatarFallback>
           </Avatar>
-          <p className="font-semibold">Ali Aais</p>
+          <p className="font-semibold">{uploadedBy.name}</p>
         </div>
         <div className="cursor-pointer">
           <DropdownMenu>
@@ -69,30 +88,30 @@ const Post = () => {
       </div>
       {
         <div className="relative">
-            <Carousel setApi={setApi} className="w-full">
-              <CarouselContent>
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <CarouselItem key={index}>
-                    <Card>
-                      <CardContent className="flex aspect-square items-center justify-center">
-                        <span className="text-4xl font-semibold">
+          <Carousel setApi={setApi} className="w-full">
+            <CarouselContent>
+              {imagesUrl.map((image, index) => (
+                <CarouselItem key={index}>
+                  <Card>
+                    <CardContent className="flex aspect-square items-center justify-center">
+                      <span className="text-4xl font-semibold">
                         <Image
-                          src={PostImage}
+                          src={image}
                           className="md:w-[654px] w-full h-[400px] mx-auto md:h-[614px]"
                           alt="user upload"
                           width={654}
                           height={614}
                         />
-                        </span>
-                      </CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-            </Carousel>
-            <div className="py-2 text-center absolute -bottom-[4px] mx-auto flex justify-center w-full text-sm text-muted-foreground">
-              {current} of {count}
-            </div>
+                      </span>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
+            </CarouselContent>
+          </Carousel>
+          <div className="py-2 text-center absolute -bottom-[4px] mx-auto flex justify-center w-full text-sm text-muted-foreground">
+            {current} of {count}
+          </div>
         </div>
       }
       <div className="px-4 py-4 flex items-center justify-between">
@@ -107,20 +126,28 @@ const Post = () => {
       </div>
 
       <div className="px-4">
-        <p className="pb-2">1000 Likes</p>
+        <p className="pb-2">{likes.length} Likes</p>
         <p>
           {" "}
-          <span className="font-semibold">Ali Aais</span>{" "}
-          <span>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id
-            repellat cum asperiores hic, explicabo inventor ....{" "}
-            <span className="underline cursor-pointer font-semibold">
+          <span className="font-semibold">{uploadedBy.name}</span>{" "}
+          <span className={seeMore ? "line-clamp-none" : "line-clamp-2"}>
+            {" "}
+            {description}
+          </span>
+          {description.length > 156 && (
+            <span
+              className="underline cursor-pointer font-semibold"
+              onClick={() => {
+                setSeeMore(!seeMore);
+                console.log(seeMore);
+              }}
+            >
               See More
             </span>
-          </span>
+          )}
         </p>
         <span className="text-sm inline-block pt-2 hover:underline cursor-pointer">
-          View all {"100"} comments
+          View all {comments?.length} comments
         </span>
         <p className="text-sm py-1">1 {"hour"} ago</p>
       </div>
