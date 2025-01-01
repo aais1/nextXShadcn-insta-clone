@@ -23,8 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import PostImage from "./Post-Img.png";
-import { set } from "mongoose";
+import { PostType } from "../types";
 
 const Post = ({
   createdAt,
@@ -33,17 +32,7 @@ const Post = ({
   likes,
   uploadedBy,
   comments
-}: {
-  createdAt: Date;
-  description: string;
-  imagesUrl: string[];
-  likes: number[];
-  comments?: string[];
-  uploadedBy: {
-    name: string;
-    avatar?: string;
-  };
-}) => {
+}:PostType) => {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);

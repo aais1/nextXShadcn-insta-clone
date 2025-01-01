@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { UserQuickFollowCard } from "@/components/UserQuickFollowCard"
 import PostSkeleton from "@/components/PostSkeleton";
+import { PostType } from "./types";
 
 export default function Home() {
   const {data }=useSession();
@@ -72,7 +73,7 @@ export default function Home() {
               </> :
               <div className="flex flex-col gap-y-2">
               {
-                posts.map((post:any, index:number) => (
+                posts.map((post:PostType, index:number) => (
                   <Post key={post._id} {...post}/>
                 ))
               }
