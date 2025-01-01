@@ -26,3 +26,7 @@ export async function dbConnect() {
     }
   }
 }
+
+export const calculateElapsedTime = (createdAt:Date) => {
+  console.log(createdAt)
+};
