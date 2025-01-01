@@ -4,24 +4,26 @@ import Post from "./components/Post";
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { UserQuickFollowCard } from "@/components/UserQuickFollowCard"
+import PostSkeleton from "@/components/PostSkeleton";
 
 export default function Home() {
   const {data }=useSession();
   const [ posts ,setPosts ] = useState([]);
+  const [loading,setLoading]=useState(true);
   console.log(data)
 
   useEffect(() => {
     const fetchData=async()=>{
+      setLoading(true)
       try {
         const response=await fetch('/api/posts',{
           credentials: 'include'
         });
         const data=await response.json();
-        console.log(data)
         setPosts(data.posts)
-        console.log(posts)
+        setLoading(false)
       } catch  {
-
+        setLoading(false)
       }
     }
     fetchData();
@@ -60,14 +62,22 @@ export default function Home() {
             </div>
           
             {/* POSTS COME HERE */}
-            <div className="flex flex-col gap-y-2">
+            {
+              loading ?<>
+                {
+                  Array.from({length:2}).map((_,index)=>(
+                    <PostSkeleton key={index}/>
+                  ))
+                }
+              </> :
+              <div className="flex flex-col gap-y-2">
               {
-                Array.from({length:5}).map((_, index) => (
-                  <Post key={index}/>
+                posts.map((post:any, index:number) => (
+                  <Post key={post._id} {...post}/>
                 ))
               }
-  
             </div>
+            }
             <div>
 
             </div>
